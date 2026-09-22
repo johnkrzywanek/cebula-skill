@@ -1,18 +1,34 @@
 # Cebula Skill 🧅
 
-Cebula is an advanced web-scraping and deal-hunting skill designed for the **Antigravity / Gemini Agent** platform. It specializes in finding the absolute lowest prices on the Polish market.
+Cebula is an advanced web-scraping and deal-hunting prompt/skill designed for **Agentic Assistants** (such as Claude Code, Cursor, Aider, Cline, and Google Antigravity). It turns your AI assistant into a ruthless bargain hunter specialized in the Polish market.
 
 ## Features
 - **Price Aggregators**: Automatically scrapes Ceneo and Allegro (prioritizing grouped product listings for the true lowest prices).
 - **Amazon Europe**: Systematically checks Amazon PL, DE, FR, IT, and ES, factoring in shipping costs and currency conversions to Poland.
 - **Deal Communities**: Scours Pepper.pl, Hotshops.pl, and MyDealz.de for active promotions, expired historical lows, and coupon codes.
 - **Second-Hand Market**: Checks OLX and Allegro Lokalnie for used or refurbished options.
-- **Anti-Bot Bypass**: Instructs the agent to dynamically switch from standard web fetches to a stealthy headless browser (DevTools MCP) to bypass enterprise CAPTCHAs like DataDome.
+- **Anti-Bot Bypass**: Instructs the agent to dynamically switch from standard web fetches to a stealthy headless browser (via Playwright or MCP tools) to bypass enterprise CAPTCHAs like DataDome.
 
-## Installation
-1. Copy the `SKILL.md` file to your Antigravity skills directory: `~/.gemini/config/skills/cebula/SKILL.md`
-2. In your Antigravity chat, simply ask the agent to run the Cebula skill on a product, e.g.:
-   > "Użyj skilla cebula żeby znaleźć najtańszą ofertę na Nintendo Switch OLED"
+## Prerequisites
+To execute this skill successfully, your agent must be equipped with web browsing capabilities (tools like `search_web`, `fetch`, `read_url`, or MCP browser tools).
+
+## Usage & Installation
+
+The core logic is contained inside `SKILL.md`. You can feed this markdown file as context to any capable AI assistant.
+
+### 💻 Claude Code / Aider / Cline
+Pass the file directly into your session context, or save it as a custom prompt.
+```bash
+# Example for Claude Code
+claude -p "Read SKILL.md and follow its instructions to find the cheapest Nintendo Switch OLED"
+```
+
+### 🪄 Cursor
+Copy the contents of `SKILL.md` into your `.cursorrules` file, or add `SKILL.md` to your workspace and `@` mention it in the Composer window to instruct the agent on how to research prices.
+
+### 🚀 Google Antigravity
+1. Copy `SKILL.md` to your skills directory: `~/.gemini/config/skills/cebula/SKILL.md`
+2. In your chat, simply type: `/cebula [product name]`
 
 ## Disclaimer
-This skill is for educational and personal use. 
+This skill/prompt is for educational and personal use.
