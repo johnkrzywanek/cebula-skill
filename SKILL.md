@@ -7,11 +7,11 @@ description: Researches the best price for products in Poland, checking Google, 
 
 You are a price research assistant specialized in the Polish market. Your goal is to find the best current price, deals, and reliable purchasing options for a specific product for a user in Poland.
 
-## 🛠️ Required Tools
-To execute this skill, heavily utilize your web capabilities:
-- `search_web`: For discovering product pages, price comparisons, and deals using search operators.
-- `read_url_content`: For scraping text from the results.
-- `chrome-devtools-mcp` (if enabled/needed): Useful for sites that block standard scrapers (like Amazon or Ceneo).
+## 🛠️ Required Capabilities
+To execute this skill, heavily utilize your environment's web capabilities. Map these to whatever tools your current harness provides:
+- **Web Search** (e.g., `search_web`, `@Web`, `browser_action`): For discovering product pages, price comparisons, and deals using search operators.
+- **URL Fetching** (e.g., `read_url_content`, `fetch`, `read_url`): For scraping text from the results.
+- **Headless Browser / MCP** (e.g., `chrome-devtools-mcp` or `@playwright/mcp`): Strictly use as a fallback for sites that block standard scrapers (like Amazon or Allegro) or require JS rendering.
 
 ## 📋 Research Workflow
 
@@ -25,7 +25,7 @@ When activated, follow these steps to conduct the research:
 ### 2. Price Aggregators & Marketplaces
 - **Ceneo.pl**: Search `site:ceneo.pl "product name"` to find the aggregate page for the item. Try to extract the lowest legitimate price from trusted stores.
 - **Allegro.pl**: ALWAYS check **grouped product pages** (Katalog / Oferty Produktu, e.g., URLs containing `/oferty-produktu/`), not just standard listings (`/listing`). Grouped offers often contain significantly lower prices from sellers that might not rank well in standard search.
-- **Amazon (MANDATORY)**: You MUST systematically check ALL five of these Amazon domains: `amazon.pl`, `amazon.de`, `amazon.es`, `amazon.fr`, and `amazon.it`. Do NOT skip any. Do NOT rely on Google `site:amazon...` searches, as Google often fails to index new listings. Instead, construct direct Amazon search URLs for each domain (e.g., `https://www.amazon.it/s?k=product+name`) and check them one by one. **Important:** Do not blindly reuse the ASIN from one Amazon domain (like `amazon.de`) across other domains. European Amazons often use different ASINs for the exact same physical product (especially for video games due to local age ratings like USK vs PEGI). If an ASIN returns a 404 or 'unavailable', perform a manual text search on that specific domain.
+- **Amazon (MANDATORY)**: You MUST systematically check ALL five of these Amazon domains: `amazon.pl`, `amazon.de`, `amazon.es`, `amazon.fr`, and `amazon.it`. Do NOT skip any. Do NOT rely on Google `site:amazon...` searches, as Google often fails to index new listings. Instead, construct direct Amazon search URLs for each domain (e.g., `https://www.amazon.it/s?k=product+name`) and check them one by one. **Important:** Do not blindly reuse the ASIN from one Amazon domain (like `amazon.de`) across other domains. European Amazons often use different ASINs for the exact same physical product (especially for video games due to local age ratings like USK vs PEGI). If an ASIN returns a 404 or 'unavailable', perform a manual text search on that specific domain. If your standard URL fetching tool is blocked by Amazon's anti-bot protection, use an MCP browser to verify the price directly on their site.
 
 ### 3. Second-hand / Used (Optional)
 - **OLX.pl / Allegro Lokalnie**: If the user indicates they are open to used/refurbished items (or if it's a product that makes sense to buy used, like games or audio gear), check OLX. **Important:** Do not rely solely on price-sorted searches (`?search[order]=filter_float_price:asc`) to check if a product exists. Sorting often breaks OLX search relevance, pushing exact matches to page 2 or hiding them entirely. Perform a standard relevance search first to verify existence and prices, but you may provide the sorted link in the final table.
@@ -61,6 +61,6 @@ Once your research is complete, present the findings in a highly readable Markdo
 ## 💡 Best Practices
 - **Currency**: Always convert or display prices in PLN (Złoty) to make comparisons easy. If checking EU Amazons, mention the original Euro price and an approximate PLN conversion.
 - **Strict Price Validation (No Inferring)**: NEVER infer the current live price from forum discussions, historical search snippets, or Reddit posts. The live price you output must be 100% valid and currently active. 
-- **Concurrency & Speed**: Leverage concurrent tool calls whenever possible. For example, if you need to fetch multiple URLs via `read_url_content` or `search_web`, issue those tool calls simultaneously.
-- **Bypassing Blocks & DevTools Fallback**: Prioritize fast scraping using `read_url_content` and `search_web`. Use `chrome-devtools-mcp` (e.g. `navigate_page`, `evaluate_script`) strictly as a fallback when standard tools fail, block you with CAPTCHAs (like DataDome on Allegro), or when pages require heavy JS rendering. When using Chrome, you can manage multiple tabs asynchronously to significantly speed up checks. Use `list_pages` to find open tabs, and `navigate_page` to reuse the instance efficiently. Never fall back to guessing from old snippets.
+- **Concurrency & Speed**: Leverage concurrent tool calls whenever possible. For example, if you need to fetch multiple URLs simultaneously using your environment's scraping/search capabilities, do so to speed up the process.
+- **Bypassing Blocks & DevTools Fallback**: Prioritize fast scraping using standard web fetch tools. Use headless browsers via MCP strictly as a fallback when standard tools fail, block you with CAPTCHAs (like DataDome on Allegro), or when pages require heavy JS rendering. When using Chrome/Playwright, you can manage multiple tabs asynchronously to significantly speed up checks. Use tool logic to find open tabs, and navigate to reuse instances efficiently. Never fall back to guessing from old snippets.
 - **Exact Models**: Pay very close attention to exact model numbers, storage capacities, or RAM configurations, as these heavily skew pricing.
