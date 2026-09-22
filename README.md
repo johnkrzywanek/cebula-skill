@@ -16,12 +16,15 @@ To execute this skill successfully, your agent must be equipped with web browsin
 
 The core logic is contained inside `SKILL.md`. You can feed this markdown file as context to any capable AI assistant.
 
-### 💻 Claude Code / Aider / Cline
-Pass the file directly into your session context, or save it as a custom prompt.
+### 💻 Claude Code
+Claude also supports a skills directory. You can drop `SKILL.md` directly into your Claude skills/prompts configuration folder, or pass the file into your session context dynamically:
 ```bash
-# Example for Claude Code
+# Example for Claude Code (Context)
 claude -p "Read SKILL.md and follow its instructions to find the cheapest Nintendo Switch OLED"
 ```
+
+### 💻 Aider / Cline
+Pass the file directly into your session context, or save it as a custom prompt/architect rule.
 
 ### 🪄 Cursor
 Copy the contents of `SKILL.md` into your `.cursorrules` file, or add `SKILL.md` to your workspace and `@` mention it in the Composer window to instruct the agent on how to research prices.
